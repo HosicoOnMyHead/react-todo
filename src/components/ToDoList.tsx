@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Categories, categoryState, toDoSelector } from "../atoms";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { categoryState, toDoSelector } from "../atoms";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
+import CreateCategory from "./CreateCategory";
 
 const Wrapper = styled.div`
   background-color: #ecf0f1;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   padding: 15px;
 `;
 
-const Select = styled.select`
+const Select = styled(motion.select)`
   background-color: transparent;
   width: 100px;
   height: 40px;
@@ -40,15 +40,10 @@ const Nav = styled.nav`
   margin-bottom: 20px;
 `;
 
-const InputCategory = styled.input`
-  margin-left: 10px;
-  font-size: 20px;
-  height: 40px;
-  border: none;
-  background-color: transparent;
-  &:focus {
-    outline: none;
-  }
+const Svg = styled(motion.svg)`
+  height: 15px;
+  width: 15px;
+  cursor: pointer;
 `;
 
 function ToDoList() {
@@ -61,26 +56,29 @@ function ToDoList() {
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
     setCategory(event.currentTarget.value as any);
   };
+  console.log(Array.isArray(category));
   return (
     <Wrapper>
       <Nav>
-        <Select value={category} onInput={onInput}>
-          <option value={Categories.TO_DO}>To Do</option>
-          <option value={Categories.DOING}>Doing</option>
-          <option value={Categories.DONE}>Done</option>
+        <Select
+          value={category[0].text}
+          onInput={onInput}
+          whileHover={{ backgroundColor: "rgba(0,0,0,0.1)" }}
+        >
+          {category?.map((category) => (
+            <option key={category.id} value={category.text}>
+              {category.text}
+            </option>
+          ))}
         </Select>
-        <FontAwesomeIcon
-          icon={faPlus}
-          size="2x"
+        <Svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
           onClick={onClick}
-          color="#95a5a6"
-          cursor="pointer"
-        />
-        {open ? (
-          <form>
-            <InputCategory placeholder="Creat New Category" autoFocus />
-          </form>
-        ) : null}
+        >
+          <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+        </Svg>
+        <AnimatePresence>{open ? <CreateCategory /> : null}</AnimatePresence>
       </Nav>
       <CreateToDo />
       <hr />
