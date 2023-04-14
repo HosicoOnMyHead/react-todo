@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";
-import { categoryState } from "../atoms";
+import { categoriesState, categoryState } from "../atoms";
 import { useForm } from "react-hook-form";
 
 const InputCategory = styled(motion.input)`
@@ -20,13 +20,10 @@ interface IForm {
 }
 
 function CreateCategory() {
-  const setCategory = useSetRecoilState(categoryState);
+  const setCategories = useSetRecoilState(categoriesState);
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const handleValid = ({ category }: IForm) => {
-    setCategory((oldCategories) => [
-      { text: category, id: Date.now() },
-      ...oldCategories,
-    ]);
+    setCategories((oldCategories) => [category, ...oldCategories]);
     setValue("category", "");
   };
   return (

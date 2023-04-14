@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { categoryState, toDoSelector } from "../atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { categoriesState, categoryState, toDoSelector } from "../atoms";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 import styled from "styled-components";
@@ -48,26 +48,25 @@ const Svg = styled(motion.svg)`
 
 function ToDoList() {
   const [open, setOpen] = useState(false);
-  const onClick = (event: React.MouseEvent<SVGElement>) => {
+  const onClick = () => {
     setOpen((current) => !current);
   };
   const toDos = useRecoilValue(toDoSelector);
-  const [category, setCategory] = useRecoilState(categoryState);
+  const categories = useRecoilValue(categoriesState);
+  const setCategory = useSetRecoilState(categoryState);
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(event.currentTarget.value as any);
+    setCategory(event.currentTarget.value);
   };
-  console.log(Array.isArray(category));
   return (
     <Wrapper>
       <Nav>
         <Select
-          value={category[0].text}
           onInput={onInput}
           whileHover={{ backgroundColor: "rgba(0,0,0,0.1)" }}
         >
-          {category?.map((category) => (
-            <option key={category.id} value={category.text}>
-              {category.text}
+          {categories?.map((category) => (
+            <option key={category} value={category}>
+              {category}
             </option>
           ))}
         </Select>

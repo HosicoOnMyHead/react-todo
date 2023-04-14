@@ -1,23 +1,21 @@
 import { atom, selector } from "recoil";
 
-export interface ICategories {
-  text: string;
-  id: number;
-}
+export let defaultCategories: string[] = ["TO_DO", "DOING", "DONE"];
 
 export interface IToDo {
   text: string;
   id: number;
-  category: ICategories[];
+  category: string;
 }
 
-export const categoryState = atom<ICategories[]>({
+export const categoryState = atom<string>({
   key: "category",
-  default: [
-    { text: "TO_DO", id: 1 },
-    { text: "DOING", id: 2 },
-    { text: "DONE", id: 3 },
-  ],
+  default: defaultCategories[0],
+});
+
+export const categoriesState = atom<string[]>({
+  key: "categoriesState",
+  default: defaultCategories,
 });
 
 export const toDoState = atom<IToDo[]>({
