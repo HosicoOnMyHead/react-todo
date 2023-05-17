@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";
-import { categoriesState, categoryState } from "../atoms";
+import { categoriesState } from "../atoms";
 import { useForm } from "react-hook-form";
 
 const InputCategory = styled(motion.input)`
